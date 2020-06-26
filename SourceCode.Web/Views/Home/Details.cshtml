@@ -1,0 +1,87 @@
+﻿@model ClientViewModel
+
+@{
+    ViewData["Title"] = "Client Details";
+}
+
+@*TODO create partial for this OR object in base view*@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Client Details</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Home">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-action="Index">Clients</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>Client Details</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+@*END*@
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="ibox product-detail">
+                <div class="ibox-content">
+
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <h2 class="font-bold m-b-xs">
+                                @Html.DisplayFor(model => model.Name)
+                            </h2>
+                            <small>
+                                @Html.DisplayFor(model => model.WebSite)
+                            </small>
+                            <small>
+                                @Html.DisplayFor(model => model.DirectorName)
+                            </small>
+                            <small>
+                                @Html.DisplayFor(model => model.EmailAddress)
+                            </small>
+                            <hr>
+
+
+                            <dl class="small m-t-md">
+                                <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+                                <dd>@Html.DisplayFor(model => model.WebSite)</dd>
+                                <dt>@Html.DisplayNameFor(model => model.DirectorName)</dt>
+                                <dd>@Html.DisplayFor(model => model.EmailAddress)</dd>
+                            </dl>
+                            <hr>
+
+                            <div>
+                                <div class="btn-group">
+                                    <a href=@Model.WebSite target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-link"></i> @Model.WebSite</a>
+                                    <a class="btn btn-white btn-sm" href="mailto:@Model.EmailAddress"><i class="fa fa-envelope"></i> Contact</a>
+                                </div>
+                            </div>
+                            <hr />
+                            <div>
+                                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                                <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
+                                <a asp-action="Index">Back to List</a>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+

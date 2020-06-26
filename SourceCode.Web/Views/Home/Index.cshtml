@@ -1,0 +1,144 @@
+﻿@model ClientsViewModel
+
+@{
+    ViewData["Title"] = "Clients";
+}
+
+@*TODO create partial for this OR object in base view*@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2>Client</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Home">Home</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>Clients</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+@*END*@
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Clients</h5>
+                    <div class="ibox-tools">
+                        <a asp-action="Create" class="btn btn-primary btn-xs">Add new client</a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <div class="m-b-lg">
+                        <form asp-action="Index" method="get" id="clientSearchForm">
+                            <div class="input-group">
+                                <input type="text" placeholder="Search clients by name..." class="form-control" name="search">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                </span>
+                            </div>
+                        </form>
+                        <div class="m-t-md">
+                            <strong>@Model.PagingStatusMessage</strong>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Search))
+                        {
+                            <div class="m-t-md">
+                                <a class="btn btn-xs btn-primary" asp-action="Index" asp-route-search="">
+                                    @Model.Search <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover issue-tracker">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@ViewData["NameSort"]" class="sortable-column">
+                                            @Html.DisplayNameFor(model => model.Items.FirstOrDefault().Name)
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@ViewData["WebSiteSort"]" class="sortable-column">
+                                            @Html.DisplayNameFor(model => model.Items.FirstOrDefault().WebSite)
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@ViewData["DirectorNameSort"]" class="sortable-column">
+                                            @Html.DisplayNameFor(model => model.Items.FirstOrDefault().DirectorName)
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@ViewData["EmailAddressSort"]" class="sortable-column">
+                                            @Html.DisplayNameFor(model => model.Items.FirstOrDefault().EmailAddress)
+                                        </a>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Items)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.WebSite)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DirectorName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EmailAddress)
+                                        </td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-2 d-flex justify-content-center">
+                        <ul class="pagination">
+                            @if (Model.HasPreviousPage)
+                            {
+                                <li class="page-item">
+                                    <a asp-controller="Home" asp-action="Index" asp-route-page="@(Model.Page - 1)" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">&lt;</a>
+                                </li>
+                            }
+                            @for (var i = 1; i <= Model.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.Page ? "active" : "")">
+                                    <a asp-controller="Home" asp-action="Index" asp-route-page="@i" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">@i</a>
+                                </li>
+                            }
+                            @if (Model.HasNextPage)
+                            {
+                                <li class="page-item">
+                                    <a asp-controller="Home" asp-action="Index" asp-route-page="@(Model.Page  + 1)" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">&gt;</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="~/lib/typehead/bootstrap3-typeahead.min.js"></script>
+    <script src="~/dist/sourcecode-clientsList.js" asp-append-version="true"></script>
+}
