@@ -1,24 +1,24 @@
-﻿import apiModule from './api-base.js';
-import * as $ from 'jquery';
-import 'bootstrap-3-typeahead';
+﻿import 'bootstrap-3-typeahead';
 
+const uri = 'api/v1/ClientApi/';
 
-    $(function () {
-        $('#clientSearchForm input[name=search]').typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 2,
-            source: function (query, process) {
-                apiModule.get(`ClientsApi/Search/${query}`)
-                    .then(response => response.json())
-                    .then((data) => {
+$(function () {
+    $('#clientSearchForm input[name=search]').typeahead({
+        hint: true,
+        highlight: true,
+        minLength: 2,
+        source: function (query, process) {
+            fetch(`${uri}Search/${query}`)
+                .then(response => response.json())
+                .then((data) => {
                     var parsed = data.map(function (x) {
-                        return `${x.name}, ${x.webSite}`
+                        var mapped = {...x}
+                        return `${mapped.name}, ${mapped.webSite}, ${mapped.emailAddress}`
                     });
 
                     return process(parsed);
                 });
-            }
-        });
+        }
     });
+});
 

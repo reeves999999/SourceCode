@@ -108,18 +108,6 @@ eval("var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!\n * jQ
 
 /***/ }),
 
-/***/ "./src/js/api-base.js":
-/*!****************************!*\
-  !*** ./src/js/api-base.js ***!
-  \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\nconst apiModule = () => {\n  return get = url => {\n    return fetch(`/api/v1/${url}`);\n  };\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (apiModule);\n\n//# sourceURL=webpack:///./src/js/api-base.js?");
-
-/***/ }),
-
 /***/ "./src/js/clients-list.js":
 /*!********************************!*\
   !*** ./src/js/clients-list.js ***!
@@ -128,7 +116,7 @@ eval("__webpack_require__.r(__webpack_exports__);\nconst apiModule = () => {\n  
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _api_base_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./api-base.js */ \"./src/js/api-base.js\");\n/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jquery */ \"./node_modules/jquery/dist/jquery.js\");\n/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var bootstrap_3_typeahead__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bootstrap-3-typeahead */ \"./node_modules/bootstrap-3-typeahead/bootstrap3-typeahead.js\");\n/* harmony import */ var bootstrap_3_typeahead__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(bootstrap_3_typeahead__WEBPACK_IMPORTED_MODULE_2__);\n\n\n\njquery__WEBPACK_IMPORTED_MODULE_1__(function () {\n  jquery__WEBPACK_IMPORTED_MODULE_1__('#clientSearchForm input[name=search]').typeahead({\n    hint: true,\n    highlight: true,\n    minLength: 2,\n    source: function (query, process) {\n      _api_base_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"].get(`ClientsApi/Search/${query}`).then(response => response.json()).then(data => {\n        var parsed = data.map(function (x) {\n          return `${x.name}, ${x.webSite}`;\n        });\n        return process(parsed);\n      });\n    }\n  });\n});\n\n//# sourceURL=webpack:///./src/js/clients-list.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var bootstrap_3_typeahead__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap-3-typeahead */ \"./node_modules/bootstrap-3-typeahead/bootstrap3-typeahead.js\");\n/* harmony import */ var bootstrap_3_typeahead__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap_3_typeahead__WEBPACK_IMPORTED_MODULE_0__);\n\nconst uri = 'api/v1/ClientApi/';\n$(function () {\n  $('#clientSearchForm input[name=search]').typeahead({\n    hint: true,\n    highlight: true,\n    minLength: 2,\n    source: function (query, process) {\n      fetch(`${uri}Search/${query}`).then(response => response.json()).then(data => {\n        var parsed = data.map(function (x) {\n          var mapped = { ...x\n          };\n          return `${mapped.name}, ${mapped.webSite}, ${mapped.emailAddress}`;\n        });\n        return process(parsed);\n      });\n    }\n  });\n});\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ \"./node_modules/jquery/dist/jquery.js\")))\n\n//# sourceURL=webpack:///./src/js/clients-list.js?");
 
 /***/ })
 
