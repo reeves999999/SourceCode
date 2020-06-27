@@ -13,6 +13,8 @@ Application features:
 -Versioned API
 -xUnit
 -Bootstrap Wrapper HTML integrated
+-Image upload (via MVC Details > Edit screen NOT inline editor)
+-Child Projects (no CRUD, just display)
 
 
 Missed out, but would have added, given time:
