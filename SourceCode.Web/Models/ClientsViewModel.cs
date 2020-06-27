@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SourceCode.Web.Options;
+using System.Collections.Generic;
 
 namespace SourceCode.Web.Models
 {
@@ -9,9 +10,11 @@ namespace SourceCode.Web.Models
             Items = new List<ClientViewModel>();
         }
 
-        public ClientsViewModel(IEnumerable<ClientViewModel> items)
+        public ClientsViewModel(IEnumerable<ClientViewModel> items, PagingOptions pagingOptions)
         {
             Items = items;
+            PageSize = pagingOptions.PageSize;
+            PageLinkCount = pagingOptions.PageLinkCount;
         }
 
         public IEnumerable<ClientViewModel> Items { get; set; }

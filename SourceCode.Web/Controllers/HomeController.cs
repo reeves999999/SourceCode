@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using SourceCode.Web.Domain.Entities;
@@ -13,6 +14,7 @@ namespace SourceCode.Web.Controllers
 {
 
     //NOTE: Naturally would add Authentication/Authorization/Roles etc. here
+    
     public class HomeController : Controller
     {
         private readonly IClientService<Client> _clientService;
@@ -39,16 +41,16 @@ namespace SourceCode.Web.Controllers
 
             var items = await _clientService.GetAsync(sort: sort, skip: skip, pageSize: pageSize, search: search);
 
-            var model = new ClientsViewModel(items.Select(x => new ClientViewModel(x)));
+            var model = new ClientsViewModel(items.Select(x => new ClientViewModel(x)), _pagingOptions);
 
             int? filteredItemsCount = null;
 
             int totalItemsCount = await _clientService.GetCountAsync();
+
             if (!string.IsNullOrWhiteSpace(search))
             {
                 filteredItemsCount = await _clientService.GetFilteredCountAsync(search);
             }
-
 
             model.SetPagingState(items.Count(), totalItemsCount, pageSize, page, sort, filteredItemsCount: filteredItemsCount, search: search);
 
@@ -63,6 +65,7 @@ namespace SourceCode.Web.Controllers
             }
 
             var client = await _clientService.GetByIdAsync(id.Value);
+
             if (client == null)
             {
                 return NotFound();
@@ -71,6 +74,7 @@ namespace SourceCode.Web.Controllers
             return View(new ClientViewModel(client));
         }
 
+        [Authorize()]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -79,6 +83,7 @@ namespace SourceCode.Web.Controllers
             }
 
             var client = await _clientService.GetByIdAsync(id.Value);
+
             if (client == null)
             {
                 return NotFound();
@@ -87,6 +92,7 @@ namespace SourceCode.Web.Controllers
             return View(new ClientViewModel(client));
         }
 
+        [Authorize()]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, ClientViewModel model)
@@ -151,7 +157,7 @@ namespace SourceCode.Web.Controllers
             return View(model);
         }
 
-
+        [Authorize()]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -160,6 +166,7 @@ namespace SourceCode.Web.Controllers
             }
 
             var client = await _clientService.GetByIdAsync(id.Value);
+
             if (client == null)
             {
                 return NotFound();
@@ -168,11 +175,18 @@ namespace SourceCode.Web.Controllers
             return View(new ClientViewModel(client));
         }
 
+        [Authorize()]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var deleted = await _clientService.DeleteAsync(id);
+
             if (!deleted)
             {
                 Log.Warning($"{nameof(Delete)} for {nameof(HomeController)} failed for ID: {id}");

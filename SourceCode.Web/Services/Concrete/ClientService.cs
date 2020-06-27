@@ -19,19 +19,16 @@ namespace SourceCode.Web.Services
         }
         public async Task<IList<T>> GetAsync(string sort = "", int skip = 0, int take = 10, string search = "")
         {
-
             var query = _dbContext.Clients
                 .AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(search.Trim()))
             {
                 query = query
-                .Where(x => x.Name.Contains(search)
-                || x.WebSite.Contains(search)
-                || x.DirectorName.Contains(search)
-                || x.EmailAddress.Contains(search));
+                .Where(x => x.Name.Contains(search));
             }
 
+            //use reflection here
             switch (sort)
             {
                 case "Name":
@@ -42,11 +39,11 @@ namespace SourceCode.Web.Services
                     query = query.OrderByDescending(x => x.Name);
                     break;
 
-                case "Website":
+                case "WebSite":
                     query = query.OrderBy(x => x.WebSite);
                     break;
 
-                case "WebsiteDesc":
+                case "WebSiteDesc":
                     query = query.OrderByDescending(x => x.WebSite);
                     break;
 
@@ -88,17 +85,14 @@ namespace SourceCode.Web.Services
         public async Task<int> GetFilteredCountAsync(string search)
         {
             return await _dbContext.Clients
-                .Where(x => x.Name.Contains(search)
-                || x.WebSite.Contains(search)
-                || x.DirectorName.Contains(search)
-                || x.EmailAddress.Contains(search))
+                .Where(x => x.Name.Contains(search))
                 .CountAsync();
         }
 
         public async Task<T> GetByIdAsync(Guid id)
         {
             var entity = await _dbContext.Clients
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(x=>x.Id == id);
 
             return entity as T;
         }
@@ -133,11 +127,11 @@ namespace SourceCode.Web.Services
                 return false;
             }
 
-            _dbContext.Clients.Update(entity);
+            _dbContext.Clients.Remove(entity);
 
-            var updated = await _dbContext.SaveChangesAsync();
+            var deleted = await _dbContext.SaveChangesAsync();
 
-            return updated > 0;
+            return deleted > 0;
 
         }
 
@@ -145,10 +139,7 @@ namespace SourceCode.Web.Services
         {
             var query = _dbContext.Clients
                .AsNoTracking()
-                .Where(x => x.Name.Contains(search)
-                || x.WebSite.Contains(search)
-                || x.DirectorName.Contains(search)
-                || x.EmailAddress.Contains(search));
+                .Where(x => x.Name.Contains(search));
 
             var output = await query.ToListAsync();
 

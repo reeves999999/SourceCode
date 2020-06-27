@@ -1,5 +1,6 @@
 ﻿using SourceCode.Web.Domain.Entities;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace SourceCode.Web.Models
 {
@@ -23,10 +24,16 @@ namespace SourceCode.Web.Models
 
         public string Name { get; set; }
 
+        [Display(Name = "Website")]
         public string WebSite { get; set; }
 
+
+
+        [Display(Name = "Director Name")]
         public string DirectorName { get; set; }
 
+
+        [Display(Name = "Email Address")]
         public string EmailAddress { get; set; }
 
         /// <summary>

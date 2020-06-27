@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SourceCode.Web.Domain.Entities;
 using SourceCode.Web.Services;
 using System;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SourceCode.Web.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         private readonly IUserService _userService;
 

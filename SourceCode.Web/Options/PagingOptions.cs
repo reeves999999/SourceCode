@@ -2,6 +2,8 @@
 {
     public class PagingOptions
     {
-        public int PageSize => 10;
+        public int PageSize { get; set; }
+
+        public int PageLinkCount { get; set; }
     }
 }

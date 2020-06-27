@@ -20,6 +20,8 @@
 
         public string Search { get; set; }
 
+        public int PageLinkCount { get; set; }
+
         public int TotalPages
         {
             get
@@ -29,6 +31,19 @@
                     return (FilteredItemsCount / PageSize) + 1;
                 }
                 return 1;
+            }
+        }
+
+        public int ForwardPagesToShow
+        {
+            get
+            {
+                int pageCount = Page + PageLinkCount;
+                if (pageCount > TotalPages)
+                {
+                    pageCount = Page + ((TotalPages - Page) % PageLinkCount);
+                }
+                return pageCount;
             }
         }
 

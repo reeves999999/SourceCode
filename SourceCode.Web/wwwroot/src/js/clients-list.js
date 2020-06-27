@@ -13,7 +13,7 @@ $(function () {
                 .then((data) => {
                     var parsed = data.map(function (x) {
                         var mapped = {...x}
-                        return `${mapped.name}, ${mapped.webSite}, ${mapped.emailAddress}`
+                        return `${mapped.name}`
                     });
 
                     return process(parsed);
