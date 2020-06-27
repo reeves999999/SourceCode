@@ -35,27 +35,28 @@
                 <div class="ibox-content">
 
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4 d-flex justify-content-center align-content-center align-items-center">
+                            @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                            {
+                                <img src="~/images/clients/@Model.ImageUrl"class="img-fluid" />
+                            }
+                            else
+                            {
+                                <div class="client-image text-center">No image available.</div>
+                            }
+                        </div>
+                        <div class="col-md-8">
 
                             <h2 class="font-bold m-b-xs">
                                 @Html.DisplayFor(model => model.Name)
                             </h2>
-                            <small>
-                                @Html.DisplayFor(model => model.WebSite)
-                            </small>
-                            <small>
-                                @Html.DisplayFor(model => model.DirectorName)
-                            </small>
-                            <small>
-                                @Html.DisplayFor(model => model.EmailAddress)
-                            </small>
-                            <hr>
-
 
                             <dl class="small m-t-md">
-                                <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+                                <dt>@Html.DisplayNameFor(model => model.WebSite)</dt>
                                 <dd>@Html.DisplayFor(model => model.WebSite)</dd>
                                 <dt>@Html.DisplayNameFor(model => model.DirectorName)</dt>
+                                <dd>@Html.DisplayFor(model => model.DirectorName)</dd>
+                                <dt>@Html.DisplayNameFor(model => model.EmailAddress)</dt>
                                 <dd>@Html.DisplayFor(model => model.EmailAddress)</dd>
                             </dl>
                             <hr>
@@ -66,6 +67,25 @@
                                     <a class="btn btn-white btn-sm" href="mailto:@Model.EmailAddress"><i class="fa fa-envelope"></i> Contact</a>
                                 </div>
                             </div>
+                            <hr />
+                            @if (Model.ClientProjects != null && Model.ClientProjects.Any())
+                            {
+                                <h3 class="font-bold m-b-md">
+                                    @Html.DisplayNameFor(model => model.ClientProjects)
+                                </h3>
+                                <ul class="list-unstyled">
+                                    @foreach (var project in Model.ClientProjects)
+                                    {
+                                        <li><i class="fa fa-bolt"></i> @project.Name</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <h3 class="font-bold m-b-xs">
+                                    No projects available.
+                                </h3>
+                            }
                             <hr />
                             <div>
                                 <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |

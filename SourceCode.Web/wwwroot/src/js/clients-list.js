@@ -22,18 +22,34 @@ $(function () {
         }
     });
 
-    $("#add-client-init").on("click", function () {
+    $(document).on("click", "#add-client-init", function () {
         addClient();
+    });
+
+    $(document).on("click", ".edit-button", function (e) {
+        displayEditForm($(this).data('id'));
+    });
+
+    $(document).on("click", ".delete-button", function (e) {
+        displayDeleteConfirm($(this).data('id'));
+    });
+
+    $(document).on("click", "#edit-client-save", function () {
+        editClient();
+    });
+
+    $(document).on("click", "#delete-client-confirm", function () {
+        deleteClient();
     });
 });
 
 
 let clients = [];
 
-function getClients() {
+function getClients(reRender) {
     fetch(uri)
         .then(response => response.json())
-        .then(data => _displayClients(data))
+        .then(data => _displayClients(data, reRender))
         .catch(error => console.error('Unable to get clients.', error));
 }
 
@@ -64,11 +80,66 @@ function addClient() {
             addWebSiteTextbox.value = '';
             addDirectorNameTextbox.value = '';
             addClientEmailAddressTextbox.value = '';
-            document.querySelector('[name=add-client-name]');
             hideAllModals();
-            getClients();
+            getClients(true);
         })
         .catch(error => console.error('Unable to add client.', error));
+}
+
+function editClient() {
+    const editClientId = document.querySelector('[name=edit-client-id]');
+    const editClientNameTextbox = document.querySelector('[name=edit-client-name]');
+    const editWebSiteTextbox = document.querySelector('[name=edit-client-website]');
+    const editDirectorNameTextbox = document.querySelector('[name=edit-client-director-name]');
+    const editClientEmailAddressTextbox = document.querySelector('[name=edit-client-email-address]');
+
+    const item = {
+        id: editClientId.value.trim(),
+        name: editClientNameTextbox.value.trim(),
+        webSite: editWebSiteTextbox.value.trim(),
+        directorName: editDirectorNameTextbox.value.trim(),
+        emailAddress: editClientEmailAddressTextbox.value.trim()
+    };
+
+    fetch(`${uri}${item.id}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(item)
+    })
+        .then(response => response.json())
+        .then(() => {
+            editClientNameTextbox.value = '';
+            editWebSiteTextbox.value = '';
+            editDirectorNameTextbox.value = '';
+            editClientEmailAddressTextbox.value = '';
+            hideAllModals();
+            getClients(true);
+        })
+        .catch(error => console.error('Unable to update client.', error));
+}
+
+function deleteClient() {
+    const clientId = document.querySelector('[name=delete-client-id]');
+
+    const item = {
+        id: clientId.value.trim(),
+    };
+
+    fetch(`${uri}${item.id}`, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(() => {
+            getClients(true);
+            hideAllModals();
+        })
+        .catch(error => console.error('Unable to delete client.', error));
 }
 
 function hideAllModals() {
@@ -76,102 +147,84 @@ function hideAllModals() {
     $('.modal-backdrop').hide();
     $("body").removeClass("modal-open");
 }
-//function deleteItem(id) {
-//    fetch(`${uri}/${id}`, {
-//        method: 'DELETE'
-//    })
-//        .then(() => getItems())
-//        .catch(error => console.error('Unable to delete item.', error));
-//}
 
-//function displayEditForm(id) {
-//    const item = todos.find(item => item.id === id);
+function displayDeleteConfirm(id) {
+    getClients(false);
+    const item = clients.find(item => item.id === id);
 
-//    document.getElementById('edit-name').value = item.name;
-//    document.getElementById('edit-id').value = item.id;
-//    document.getElementById('edit-isComplete').checked = item.isComplete;
-//    document.getElementById('editForm').style.display = 'block';
-//}
+    document.querySelector('[name=delete-client-id]').value = id;
+    document.querySelector('#delete-client-name').textContent = item.name;
 
-//function updateItem() {
-//    const itemId = document.getElementById('edit-id').value;
-//    const item = {
-//        id: parseInt(itemId, 10),
-//        isComplete: document.getElementById('edit-isComplete').checked,
-//        name: document.getElementById('edit-name').value.trim()
-//    };
-
-//    fetch(`${uri}/${itemId}`, {
-//        method: 'PUT',
-//        headers: {
-//            'Accept': 'application/json',
-//            'Content-Type': 'application/json'
-//        },
-//        body: JSON.stringify(item)
-//    })
-//        .then(() => getItems())
-//        .catch(error => console.error('Unable to update item.', error));
-
-//    closeInput();
-
-//    return false;
-//}
-
-function closeInput() {
-    document.getElementById('editForm').style.display = 'none';
+    $("#deleteClientModal").modal('show');
 }
 
-//function _displayCount(clientCount) {
-//    const name = (clientCount === 1) ? 'to-do' : 'to-dos';
+function displayEditForm(id) {
+    getClients(false);
+    const item = clients.find(item => item.id === id);
 
-//    document.getElementById('counter').innerText = `${itemCount} ${name}`;
-//}
+    document.querySelector('[name=edit-client-id]').value = id;
+    document.querySelector('[name=edit-client-name]').value = item.name;
+    document.querySelector('[name=edit-client-website]').value = item.webSite;
+    document.querySelector('[name=edit-client-director-name]').value = item.directorName;
+    document.querySelector('[name=edit-client-email-address]').value = item.emailAddress;
+    $("#editClientModal").modal('show')
+}
 
-function _displayClients(data) {
-    const tBody = document.querySelector('#clients-table-body');
-    tBody.innerHTML = '';
+function _displayClients(data, reRender) {
+    if (reRender) {
+        const tBody = document.querySelector('#clients-table-body');
+        tBody.innerHTML = '';
 
-    //_displayCount(data.length);
+        const linkElement = document.createElement('a');
+        const buttonElement = document.createElement('button');
 
-    const linkElement = document.createElement('a');
+        data.forEach(item => {
 
-    data.forEach(item => {
+            let editButton = buttonElement.cloneNode(false);
+            editButton.innerText = 'Edit';
+            editButton.setAttribute('type', 'button');
+            editButton.setAttribute('class', 'btn btn-warning btn-xs edit-button');
+            editButton.setAttribute('data-id', item.id);
 
-        let editLink = linkElement.cloneNode(false);
-        editLink.innerText = 'Edit';
-        editLink.setAttribute('onclick', `displayEditForm(${item.id})`);
+            let detailsLink = linkElement.cloneNode(false);
+            detailsLink.innerText = 'Details';
+            detailsLink.setAttribute('class', 'btn btn-primary btn-xs');
+            detailsLink.setAttribute('href', `/Home/Details/(${item.id})`);
 
-        let detailsLink = linkElement.cloneNode(false);
-        detailsLink.innerText = 'Details';
-        detailsLink.setAttribute('href', `/Home/Details/(${item.id})`);
+            let deleteButton = buttonElement.cloneNode(false);
+            deleteButton.innerText = 'Delete';
+            deleteButton.setAttribute('type', 'button');
+            deleteButton.setAttribute('class', 'btn btn-danger btn-xs edit-button');
+            deleteButton.setAttribute('data-id', item.id);
 
-        let deleteLink = linkElement.cloneNode(false);
-        deleteLink.innerText = 'Delete';
-        deleteLink.setAttribute('href', `/Home/Delete/(${item.id})`);
+            let tr = tBody.insertRow();
+            let td1 = tr.insertCell(0);
+            let textNode = document.createTextNode(item.name);
+            td1.appendChild(textNode);
 
-        let tr = tBody.insertRow();
-        let td1 = tr.insertCell(0);
-        let textNode = document.createTextNode(item.name);
-        td1.appendChild(textNode);
+            let td2 = tr.insertCell(1);
+            textNode = document.createTextNode(item.webSite);
+            td2.appendChild(textNode);
 
-        let td2 = tr.insertCell(1);
-        textNode = document.createTextNode(item.webSite);
-        td2.appendChild(textNode);
+            let td3 = tr.insertCell(2);
+            textNode = document.createTextNode(item.directorName);
+            td3.appendChild(textNode);
 
-        let td3 = tr.insertCell(2);
-        textNode = document.createTextNode(item.directorName);
-        td3.appendChild(textNode);
+            let td4 = tr.insertCell(3);
+            textNode = document.createTextNode(item.emailAddress);
+            td4.appendChild(textNode);
 
-        let td4 = tr.insertCell(3);
-        textNode = document.createTextNode(item.emailAddress);
-        td4.appendChild(textNode);
-
-        let td5 = tr.insertCell(4);
-        td5.appendChild(editLink);
-        td5.appendChild(detailsLink);
-        td5.appendChild(deleteLink);
-    });
+            let td5 = tr.insertCell(4);
+            td5.appendChild(editButton);
+            td5.appendChild(detailsLink);
+            td5.appendChild(deleteButton);
+        });
+    }
+    //update page links
+    //update paging summary
 
     clients = data;
 }
+
+getClients(false);
 

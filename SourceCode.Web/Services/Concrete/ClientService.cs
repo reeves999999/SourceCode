@@ -92,6 +92,7 @@ namespace SourceCode.Web.Services
         public async Task<T> GetByIdAsync(Guid id)
         {
             var entity = await _dbContext.Clients
+                .Include(x=>x.ClientProjects)
                 .FirstOrDefaultAsync(x=>x.Id == id);
 
             return entity as T;

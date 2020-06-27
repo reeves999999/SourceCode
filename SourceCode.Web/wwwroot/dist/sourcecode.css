@@ -1,3 +1,9 @@
+h1, h2, h3, h4, h5 {
+  color: orange; }
+
+.container {
+  background: #fff; }
+
 .wrapper-content {
   padding: 10px 0; }
 
@@ -12,8 +18,30 @@ th a.sortable-column {
     right: 0;
     content: '\f0dc';
 }*/
-table tbody td:last-child a {
-  color: #007bff;
-  text-decoration: none;
-  padding-left: 10px; }
+table tbody td:last-child button, table tbody td:last-child a {
+  margin-left: 10px; }
+
+.client-image {
+  width: 200px;
+  height: 200px; }
+
+@media only screen and (max-width: 992px) {
+  table tbody td:last-child {
+    padding-right: 10px; }
+    table tbody td:last-child button, table tbody td:last-child a {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      word-break: normal;
+      margin-right: 5px; } }
+
+@media only screen and (max-width: 768px) {
+  table {
+    font-size: .7rem; }
+    table tbody td {
+      word-break: break-all; }
+  .table-responsive {
+    overflow: hidden; }
+  .ibox-content {
+    padding: 10px; } }
 

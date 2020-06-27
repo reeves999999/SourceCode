@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -7,6 +8,7 @@ using SourceCode.Web.Models;
 using SourceCode.Web.Options;
 using SourceCode.Web.Services;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,18 +16,20 @@ namespace SourceCode.Web.Controllers
 {
 
     //NOTE: Naturally would add Authentication/Authorization/Roles etc. here
-    
+
     public class HomeController : Controller
     {
         private readonly IClientService<Client> _clientService;
         private readonly IConfiguration _config;
         private readonly PagingOptions _pagingOptions;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public HomeController(IClientService<Client> clientService, IConfiguration config, PagingOptions pagingOptions)
+        public HomeController(IClientService<Client> clientService, IConfiguration config, PagingOptions pagingOptions, IWebHostEnvironment webHostEnvironment)
         {
             _clientService = clientService;
             _config = config;
             _pagingOptions = pagingOptions;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index(string sort = "", int page = 1, string search = "")
@@ -71,7 +75,10 @@ namespace SourceCode.Web.Controllers
                 return NotFound();
             }
 
-            return View(new ClientViewModel(client));
+            var model = new ClientViewModel(client);
+            model.ImageUrlPath = $"~/images/clients/{client.ImageUrl}";
+
+            return View(model);
         }
 
         [Authorize()]
@@ -111,6 +118,19 @@ namespace SourceCode.Web.Controllers
                     Log.Warning($"{nameof(Edit)} for {nameof(HomeController)} failed to Update for ID: {model.Id} - no such item found in DB.");
 
                     return BadRequest();
+                }
+                if (model.ImageFile != null)
+                {
+                    string wwwRootPath = _webHostEnvironment.WebRootPath;
+                    string fileName = Path.GetFileNameWithoutExtension(model.ImageFile.FileName);
+                    string extension = Path.GetExtension(model.ImageFile.FileName);
+                    model.ImageUrl = fileName = $"{fileName}.{extension}";
+                    string path = Path.Combine(wwwRootPath + "/Images/Clients/", fileName);
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(fileStream);
+                    }
+
                 }
 
                 client = model.MapToDomainObject(client, model);

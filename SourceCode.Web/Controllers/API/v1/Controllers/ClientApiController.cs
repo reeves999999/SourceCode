@@ -84,5 +84,51 @@ namespace SourceCode.Web.Controllers.API.v1.Controllers
             return Created(locationUri, response);
         }
 
+        [HttpPut(ApiRoutes.Clients.Update)]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] ClientUpdateRequest request)
+        {
+            var client = await _clientService.GetByIdAsync(id);
+
+            if(client == null)
+            {
+                return NotFound();
+            }
+
+            client.Name = request.Name;
+            client.WebSite = request.WebSite;
+            client.DirectorName = request.DirectorName;
+            client.EmailAddress = request.EmailAddress;
+
+            var updated = await _clientService.UpdateAsync(client);
+
+            if (updated)
+            {
+                return Ok(new ClientUpdateResponse
+                {
+                    Id=client.Id,
+                    Name = client.Name,
+                    WebSite = client.WebSite,
+                    DirectorName = client.DirectorName,
+                    EmailAddress = client.EmailAddress,
+
+                });
+            }
+
+            return NotFound();
+        }
+
+        [HttpDelete(ApiRoutes.Clients.Delete)]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var deleted = await _clientService.DeleteAsync(id);
+
+            if (deleted)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
+        }
+
     }
 }

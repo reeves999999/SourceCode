@@ -1,4 +1,12 @@
-﻿.wrapper-content {
+﻿h1,h2,h3,h4,h5{
+    color:orange;
+}
+
+.container{
+    background:#fff;
+}
+
+.wrapper-content {
     padding: 10px 0;
 }
 
@@ -16,10 +24,50 @@ th a.sortable-column {
 }*/
 
 table tbody td:last-child {
-    a {
-        color: #007bff;
-        text-decoration: none;
+    button, a {
+        margin-left: 10px;
+    }
+}
 
-    padding-left: 10px;
+.client-image{
+    width:200px;
+    height:200px;
+}
+
+@media only screen and (max-width: 992px) {
+    table tbody  {
+
+
+        td:last-child {
+            button, a {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+                word-break: normal;
+                margin-right: 5px;
+            }
+
+            padding-right: 10px;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    table {
+        font-size: .7rem;
+
+        tbody {
+            td {
+                word-break: break-all;
+            }
+        }
+    }
+
+    .table-responsive {
+        overflow: hidden;
+    }
+
+    .ibox-content {
+        padding: 10px;
     }
 }

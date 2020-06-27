@@ -22,9 +22,14 @@
   <ItemGroup>
     <Folder Include="Domain\Enums\" />
     <Folder Include="Helpers\" />
+    <Folder Include="wwwroot\images\Clients\" />
     <Folder Include="Middleware\" />
     <Folder Include="Testing\" />
     <Folder Include="ViewComponents\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\Clients\a81d84fb-4537-41f9-088c-08d819466b25.jpg" />
   </ItemGroup>
 
 </Project>
