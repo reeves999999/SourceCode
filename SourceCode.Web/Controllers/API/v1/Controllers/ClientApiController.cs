@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using SourceCode.Web.Controllers.API.v1.Contracts.Requests;
 using SourceCode.Web.Controllers.API.v1.Contracts.Responses;
 using SourceCode.Web.Domain.Entities;
 using SourceCode.Web.Services;
@@ -53,5 +54,35 @@ namespace SourceCode.Web.Controllers.API.v1.Controllers
 
                 return Ok(items.Select(x => new ClientResponse(x)));
             }
+
+
+        [HttpPost(ApiRoutes.Clients.Create)]
+        public async Task<IActionResult> Create([FromBody] ClientCreateRequest request)
+        {
+            var newId = Guid.NewGuid();
+            var client = new Client
+            {
+                Id = newId,
+                Name = request.Name,
+                WebSite = request.WebSite,
+                DirectorName = request.DirectorName,
+                EmailAddress = request.EmailAddress
+            };
+
+            await _clientService.CreateAsync(client);
+
+            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+
+            var locationUri = $"{baseUrl}/{ApiRoutes.Clients.Get.Replace("{id}", newId.ToString())}";
+
+            var response = new ClientCreateResponse { 
+                Success = true,
+                Name = request.Name,
+                URL = locationUri
+            };
+
+            return Created(locationUri, response);
+        }
+
     }
 }

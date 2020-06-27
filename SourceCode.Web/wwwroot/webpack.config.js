@@ -10,7 +10,6 @@ module.exports = (env, argv) => {
         mode: argv.mode === "production" ? "production" : "development",
 
         entry: {
-            main: './src/js/sourcecode-index.js',
             clientsList: './src/js/clients-list.js',
             sourcecode: './src/sass/sourcecode-index.scss'
         },
@@ -57,7 +56,8 @@ module.exports = (env, argv) => {
             }),
             new webpack.ProvidePlugin({
                 $: 'jquery',
-                jQuery: 'jquery'
+                jQuery: 'jquery',
+                Popper: ['popper.js', 'default']
             })
         ]
     };

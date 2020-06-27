@@ -17,6 +17,8 @@ Application features:
 
 Missed out, but would have added, given time:
 
+-Validation on page for create/update modals
+-Add unique index to client name
 -CQRS
 -Separate API,MVC and Service projects
 -Separate Identity and Application DB contexts
@@ -35,6 +37,9 @@ Missed out, but would have added, given time:
 -Wider searching and filtering
 -TypeScript
 -Use reflection on object properties to better deduce sorting and filtering without magic strings
+-Improve CSS responsiveness around tables
+-Improve UI/UX - animated positive cues for successful updates/errors etc.
+-Allow JS to update paging status (currently commented out) 
 
 ISSUES:
 

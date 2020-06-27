@@ -1,11 +1,19 @@
+.wrapper-content {
+  padding: 10px 0; }
+
 th a.sortable-column {
   position: relative;
   padding-right: 20px; }
 
-th a.sortable-column::after {
-  position: absolute;
-  font-family: 'FontAwesome';
-  top: 0;
-  right: 0;
-  content: '\f0dc'; }
+/*th a.sortable-column::after {
+    position: absolute;
+    font-family: 'FontAwesome';
+    top: 0;
+    right: 0;
+    content: '\f0dc';
+}*/
+table tbody td:last-child a {
+  color: #007bff;
+  text-decoration: none;
+  padding-left: 10px; }
 
