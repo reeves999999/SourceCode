@@ -130,7 +130,6 @@ namespace SourceCode.Web.Controllers
                     {
                         await model.ImageFile.CopyToAsync(fileStream);
                     }
-
                 }
 
                 client = model.MapToDomainObject(client, model);
@@ -162,6 +161,19 @@ namespace SourceCode.Web.Controllers
             if (ModelState.IsValid)
             {
                 var client = model.MapToDomainObject(new Client(), model);
+
+                if (model.ImageFile != null)
+                {
+                    string wwwRootPath = _webHostEnvironment.WebRootPath;
+                    string fileName = Path.GetFileNameWithoutExtension(model.ImageFile.FileName);
+                    string extension = Path.GetExtension(model.ImageFile.FileName);
+                    model.ImageUrl = fileName = $"{fileName}.{extension}";
+                    string path = Path.Combine(wwwRootPath + "/Images/Clients/", fileName);
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(fileStream);
+                    }
+                }
 
                 bool created = await _clientService.CreateAsync(client);
 

@@ -27,7 +27,6 @@
                 <div class="ibox-title">
                     <h5>Clients</h5>
                     <div class="ibox-tools">
-                        @*<a asp-action="Create" class="btn btn-primary btn-xs">Add new client</a>*@
                         <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addClientModal">
                             Add New Client
                         </button>
@@ -35,123 +34,132 @@
                 </div>
                 <div class="ibox-content">
 
-                    <div class="m-b-lg">
-                        <form asp-action="Index" method="get" id="clientSearchForm">
-                            <div class="input-group">
-                                <input type="text" placeholder="Search clients by name..." class="form-control" name="search">
-                                <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-primary">Search</button>
-                                </span>
-                            </div>
-                        </form>
-                        @*<div class="m-t-md">
-                                <strong>@Model.PagingStatusMessage</strong>
-                            </div>*@
-                        @if (!string.IsNullOrEmpty(Model.Search))
-                        {
-                            <div class="m-t-md">
-                                <a class="btn btn-xs btn-primary" asp-action="Index" asp-route-search="">
-                                    @Model.Search <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        }
-                    </div>
+                    @if (Model.Items != null && Model.Items.Any())
+                    {
 
-                    <div class="table-responsive">
-                        <table class="table table-hover issue-tracker">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@ViewData["NameSort"]" class="sortable-column">
-                                            @Html.DisplayNameFor(model => model.Items.FirstOrDefault().Name)
-                                        </a>
-                                    </th>
-                                    <th>
-                                        <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@ViewData["WebSiteSort"]" class="sortable-column">
-                                            @Html.DisplayNameFor(model => model.Items.FirstOrDefault().WebSite)
-                                        </a>
-                                    </th>
-                                    <th>
-                                        <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@ViewData["DirectorNameSort"]" class="sortable-column">
-                                            @Html.DisplayNameFor(model => model.Items.FirstOrDefault().DirectorName)
-                                        </a>
-                                    </th>
-                                    <th>
-                                        <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@ViewData["EmailAddressSort"]" class="sortable-column">
-                                            @Html.DisplayNameFor(model => model.Items.FirstOrDefault().EmailAddress)
-                                        </a>
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="clients-table-body">
-                                @foreach (var item in Model.Items)
-                                {
+                        <div class="m-b-lg">
+                            <form asp-action="Index" method="get" id="clientSearchForm">
+                                <div class="input-group">
+                                    <input type="text" placeholder="Search clients by name..." class="form-control" name="search">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary">Search</button>
+                                    </span>
+                                </div>
+                            </form>
+                            @*<div class="m-t-md">
+                    <strong>@Model.PagingStatusMessage</strong>
+                </div>*@
+                            @if (!string.IsNullOrEmpty(Model.Search))
+                            {
+                                <div class="m-t-md">
+                                    <a class="btn btn-xs btn-primary" asp-action="Index" asp-route-search="">
+                                        @Model.Search <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover issue-tracker">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <a asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.WebSite)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.DirectorName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.EmailAddress)
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-warning btn-xs edit-button" data-id="@item.Id">
-                                                Edit
-                                            </button>
-                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-xs">Details</a>
-                                            <button type="button" class="btn btn-danger btn-xs delete-button" data-id="@item.Id">
-                                                Delete
-                                            </button>
-                                        </td>
-
-
+                                        <th>
+                                            <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@ViewData["NameSort"]" class="sortable-column">
+                                                @Html.DisplayNameFor(model => model.Items.FirstOrDefault().Name)
+                                            </a>
+                                        </th>
+                                        <th>
+                                            <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@ViewData["WebSiteSort"]" class="sortable-column">
+                                                @Html.DisplayNameFor(model => model.Items.FirstOrDefault().WebSite)
+                                            </a>
+                                        </th>
+                                        <th>
+                                            <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@ViewData["DirectorNameSort"]" class="sortable-column">
+                                                @Html.DisplayNameFor(model => model.Items.FirstOrDefault().DirectorName)
+                                            </a>
+                                        </th>
+                                        <th>
+                                            <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@ViewData["EmailAddressSort"]" class="sortable-column">
+                                                @Html.DisplayNameFor(model => model.Items.FirstOrDefault().EmailAddress)
+                                            </a>
+                                        </th>
+                                        <th></th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody id="clients-table-body">
+                                    @foreach (var item in Model.Items)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.WebSite)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.DirectorName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmailAddress)
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-warning btn-xs edit-button" data-id="@item.Id">
+                                                    Edit
+                                                </button>
+                                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-xs">Details</a>
+                                                <button type="button" class="btn btn-danger btn-xs delete-button" data-id="@item.Id">
+                                                    Delete
+                                                </button>
+                                            </td>
 
-                    @*<div class="mt-2 d-flex justify-content-center">
-                            <ul class="pagination">
-                                <li class="page-item">
-                                    <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">&lt;&lt;</a>
-                                </li>
 
-                                @if (Model.HasPreviousPage)
-                                {
-                                    <li class="page-item">
-                                        <a asp-controller="Home" asp-action="Index" asp-route-page="@(Model.Page - 1)" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">&lt;</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a asp-controller="Home" asp-action="Index" asp-route-page="@(Model.Page - 1)" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">@(Model.Page - 1)</a>
-                                    </li>
-                                }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
 
-                                @for (var i = Model.Page; i <= Model.ForwardPagesToShow; i++)
-                                {
-                                    <li class="page-item @(i == Model.Page ? "active" : "")">
-                                        <a asp-controller="Home" asp-action="Index" asp-route-page="@i" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">@i</a>
-                                    </li>
-                                }
+                        @*<div class="mt-2 d-flex justify-content-center">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a asp-controller="Home" asp-action="Index" asp-route-page="1" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">&lt;&lt;</a>
+                    </li>
 
-                                @if (Model.HasNextPage)
-                                {
-                                    <li class="page-item">
-                                        <a asp-controller="Home" asp-action="Index" asp-route-page="@(Model.Page  + 1)" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">&gt;</a>
-                                    </li>
-                                }
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="page-item">
+                            <a asp-controller="Home" asp-action="Index" asp-route-page="@(Model.Page - 1)" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">&lt;</a>
+                        </li>
+                        <li class="page-item">
+                            <a asp-controller="Home" asp-action="Index" asp-route-page="@(Model.Page - 1)" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">@(Model.Page - 1)</a>
+                        </li>
+                    }
 
-                                <li class="page-item">
-                                    <a asp-controller="Home" asp-action="Index" asp-route-page="@Model.TotalPages" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">&gt;&gt;</a>
-                                </li>
-                            </ul>
-                        </div>*@
+                    @for (var i = Model.Page; i <= Model.ForwardPagesToShow; i++)
+                    {
+                        <li class="page-item @(i == Model.Page ? "active" : "")">
+                            <a asp-controller="Home" asp-action="Index" asp-route-page="@i" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">@i</a>
+                        </li>
+                    }
+
+                    @if (Model.HasNextPage)
+                    {
+                        <li class="page-item">
+                            <a asp-controller="Home" asp-action="Index" asp-route-page="@(Model.Page  + 1)" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">&gt;</a>
+                        </li>
+                    }
+
+                    <li class="page-item">
+                        <a asp-controller="Home" asp-action="Index" asp-route-page="@Model.TotalPages" asp-route-sort="@Model.Sort" asp-route-search="@Model.Search" class="page-link">&gt;&gt;</a>
+                    </li>
+                </ul>
+            </div>*@
+                    }
+                    else
+                    {
+                        <span>No clients saved.</span>
+                    }
+
+
                 </div>
 
             </div>
@@ -170,6 +178,7 @@
                 </button>
             </div>
             <div class="modal-body">
+                <ul id="add-client-error-message" class="text-danger list-unstyled mb-md-4"></ul>
                 <form action="javascript:void(0);" method="POST" onsubmit="addNewClient()">
 
                     <div class="form-group row">
@@ -195,6 +204,14 @@
                             <input name="add-client-email-address" class="form-control" placeholder="Email Address" />
                         </div>
                     </div>
+
+                    @*<div class="form-group row">
+                        <div class="col-sm-10">
+                            <label for="add-client-image-file">Company Logo</label>
+                            <input id="ImageFile" type="file"
+                                   name="add-client-image-file" />
+                        </div>
+                    </div>*@
                 </form>
             </div>
             <div class="modal-footer">
@@ -215,19 +232,21 @@
                 </button>
             </div>
             <div class="modal-body">
+
+                <ul id="edit-client-error-message" class="text-danger list-unstyled mb-md-4"></ul>
                 <form action="javascript:void(0);" method="PUT" onsubmit="editClient()">
                     <input type="hidden" name="edit-client-id" value="0" />
                     <div class="form-group row">
                         <label class="col-sm-2" for="edit-client-name">Name</label>
                         <div class="col-sm-10">
-                            <input name="edit-client-name" class="form-control" placeholder="Client Name" />
+                            <input name="edit-client-name" class="form-control" placeholder="Client Name" required />
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2" for="edit-client-website">Web Site</label>
                         <div class="col-sm-10">
-                            <input name="edit-client-website" class="form-control" placeholder="Web Site" />
+                            <input type="url" name="edit-client-website" class="form-control" placeholder="Web Site" required />
                         </div>
                     </div>
 
@@ -241,7 +260,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2" for="edit-client-email-address">Email Address</label>
                         <div class="col-sm-10">
-                            <input name="edit-client-email-address" class="form-control" placeholder="Email Address" />
+                            <input name="edit-client-email-address" type="email" required class="form-control" placeholder="Email Address" />
                         </div>
                     </div>
                 </form>
@@ -266,12 +285,13 @@
                 </button>
             </div>
             <div class="modal-body">
+                <ul id="delete-client-error-message" class="text-danger list-unstyled mb-md-4"></ul>
                 <form action="javascript:void(0);" method="PUT" onsubmit="deleteClient()">
                     <input type="hidden" name="delete-client-id" value="0" />
-                        <label class="col-sm-2" for="edit-client-name">Name</label>
-                        <div class="col-sm-12">
-                            <strong id="delete-client-name"></strong>
-                        </div>
+                    <label class="col-sm-2" for="edit-client-name">Name</label>
+                    <div class="col-sm-12">
+                        <strong id="delete-client-name"></strong>
+                    </div>
 
                 </form>
             </div>

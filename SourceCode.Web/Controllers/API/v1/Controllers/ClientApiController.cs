@@ -3,8 +3,10 @@ using Serilog;
 using SourceCode.Web.Controllers.API.v1.Contracts.Requests;
 using SourceCode.Web.Controllers.API.v1.Contracts.Responses;
 using SourceCode.Web.Domain.Entities;
+using SourceCode.Web.Models;
 using SourceCode.Web.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,48 +14,48 @@ namespace SourceCode.Web.Controllers.API.v1.Controllers
 {
     public class ClientApiController : ControllerBase
     {
-            private readonly IClientService<Client> _clientService;
+        private readonly IClientService<Client> _clientService;
 
-            public ClientApiController(IClientService<Client> clientService)
-            {
+        public ClientApiController(IClientService<Client> clientService)
+        {
             _clientService = clientService;
-            }
+        }
 
-            [HttpGet(ApiRoutes.Clients.GetAll)]
-            public async Task<IActionResult> GetAll()
+        [HttpGet(ApiRoutes.Clients.GetAll)]
+        public async Task<IActionResult> GetAll([FromRoute] string search)
+        {
+            var items = await _clientService.GetAsync(search:search);
+
+            if (items == null || !items.Any())
             {
-                var items = await _clientService.GetAsync();
-
-                if (items == null || !items.Any())
-                {
-                    Log.Information($"{nameof(ClientApiController)} - {nameof(GetAll)} - No results returned.");
-                }
-
-                return Ok(items.Select(x => new ClientResponse(x)));
+                Log.Information($"{nameof(ClientApiController)} - {nameof(GetAll)} - No results returned.");
             }
 
-            [HttpGet(ApiRoutes.Clients.Get)]
-            public async Task<IActionResult> Get([FromRoute] Guid id)
+            return Ok(items.Select(x => new ClientResponse(x)));
+        }
+
+        [HttpGet(ApiRoutes.Clients.Get)]
+        public async Task<IActionResult> Get([FromRoute] Guid id)
+        {
+            var item = await _clientService.GetByIdAsync(id);
+
+            if (item == null)
             {
-                var item = await _clientService.GetByIdAsync(id);
+                Log.Information($"{nameof(ClientApiController)} - {nameof(Get)} - 404 returned for ID: {id}.");
 
-                if (item == null)
-                {
-                    Log.Information($"{nameof(ClientApiController)} - {nameof(Get)} - 404 returned for ID: {id}.");
-
-                    return NotFound();
-                }
-
-                return Ok(new ClientResponse(item));
+                return NotFound();
             }
 
-            [HttpGet(ApiRoutes.Clients.Search)]
-            public async Task<IActionResult> Search([FromRoute] string search)
-            {
-                var items = await _clientService.SearchAsync(search);
+            return Ok(new ClientResponse(item));
+        }
 
-                return Ok(items.Select(x => new ClientResponse(x)));
-            }
+        [HttpGet(ApiRoutes.Clients.Search)]
+        public async Task<IActionResult> Search([FromRoute] string search)
+        {
+            var items = await _clientService.SearchAsync(search);
+
+            return Ok(items.Select(x => new ClientResponse(x)));
+        }
 
 
         [HttpPost(ApiRoutes.Clients.Create)]
@@ -75,7 +77,8 @@ namespace SourceCode.Web.Controllers.API.v1.Controllers
 
             var locationUri = $"{baseUrl}/{ApiRoutes.Clients.Get.Replace("{id}", newId.ToString())}";
 
-            var response = new ClientCreateResponse { 
+            var response = new ClientCreateResponse
+            {
                 Success = true,
                 Name = request.Name,
                 URL = locationUri
@@ -89,7 +92,7 @@ namespace SourceCode.Web.Controllers.API.v1.Controllers
         {
             var client = await _clientService.GetByIdAsync(id);
 
-            if(client == null)
+            if (client == null)
             {
                 return NotFound();
             }
@@ -105,7 +108,7 @@ namespace SourceCode.Web.Controllers.API.v1.Controllers
             {
                 return Ok(new ClientUpdateResponse
                 {
-                    Id=client.Id,
+                    Id = client.Id,
                     Name = client.Name,
                     WebSite = client.WebSite,
                     DirectorName = client.DirectorName,
@@ -127,7 +130,17 @@ namespace SourceCode.Web.Controllers.API.v1.Controllers
                 return NoContent();
             }
 
-            return NotFound();
+            return NotFound(new ErrorResponse
+            {
+                Errors = new List<ApiErrorModel>()
+                    {
+                        new ApiErrorModel
+                        {
+                            FieldName = string.Empty,
+                            Message = "Unable to delete client."
+                        }
+                    }
+            });
         }
 
     }

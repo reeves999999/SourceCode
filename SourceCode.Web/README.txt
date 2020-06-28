@@ -2,6 +2,8 @@
 
 If required, please set CMD to wwwroot and run "npm install" and/or "npm run build" to regenerate JS and CSS.
 
+If you delete all clients, just restart the app and two will be regenerated.
+
 
 Application features:
 
@@ -20,9 +22,7 @@ Application features:
 Missed out, but would have added, given time:
 
 -Something other than jQuery! - As Bootstrap uses this and I wanted Bootstrap I just stuck with it and its jQuery-based scripting
--Validation on page for create/update modals
 -Fluent API
--Add unique index to client name
 -CQRS
 -Swagger
 -Separate API,MVC and Service projects
@@ -34,15 +34,13 @@ Missed out, but would have added, given time:
 -JWT for APIs
 -Centralised, sharable JS modules
 -Polly (API retries)
--Unit tests
+-More Unit tests
 -JS testing using Jest
 -Integration tests using in-memory DB
 -Selenium
 -Wider searching and filtering
 -TypeScript
 -Use reflection on object properties to better deduce sorting and filtering without magic strings
--Improve CSS responsiveness around tables
--Improve UI/UX - animated positive cues for successful updates/errors etc.
 -Allow JS to update paging status (currently commented out) 
 -Make modals reusable
 -Possibly add AutoMapper (not a fan of its overuse and silent failures)

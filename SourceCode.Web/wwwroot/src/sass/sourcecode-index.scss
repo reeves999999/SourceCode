@@ -1,5 +1,6 @@
 ﻿h1,h2,h3,h4,h5{
     color:orange;
+    font-weight:bold;
 }
 
 .container{
@@ -15,14 +16,6 @@ th a.sortable-column {
     padding-right: 20px;
 }
 
-/*th a.sortable-column::after {
-    position: absolute;
-    font-family: 'FontAwesome';
-    top: 0;
-    right: 0;
-    content: '\f0dc';
-}*/
-
 table tbody td:last-child {
     button, a {
         margin-left: 10px;
@@ -32,6 +25,12 @@ table tbody td:last-child {
 .client-image{
     width:200px;
     height:200px;
+}
+
+ul[id$=-error-message] {
+    li{
+        color:red;
+    }
 }
 
 @media only screen and (max-width: 992px) {

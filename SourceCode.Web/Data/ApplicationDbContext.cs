@@ -26,6 +26,18 @@ namespace SourceCode.Web.Data
 
         public virtual DbSet<Client> Clients { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Client>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
+
+        }
+
+        
+
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

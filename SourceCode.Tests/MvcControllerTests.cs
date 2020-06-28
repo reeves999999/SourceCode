@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
@@ -10,12 +9,13 @@ using SourceCode.Web.Options;
 using SourceCode.Web.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace SourceCode.Tests
 {
+
+    //would tidy these up, add more against brittle requests, CollectionDefinitions, etc.
     public class MvcControllerTests
     {
         [Fact]
@@ -45,6 +45,35 @@ namespace SourceCode.Tests
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<ClientsViewModel>(viewResult.ViewData.Model);
             Assert.Equal(2, model.ItemCount);
+        }
+
+        [Fact]
+        public async Task Index_ReturnsAViewResult_With_No_Clients()
+        {
+            // Arrange
+            var clientService = new Mock<IClientService<Client>>();
+            var config = new Mock<IConfiguration>();
+            var configurationSection = new Mock<IConfigurationSection>();
+            configurationSection.Setup(a => a.Value).Returns("testvalue");
+            var env = new Mock<IWebHostEnvironment>();
+            var pagingOptions = new PagingOptions
+            {
+                PageLinkCount = 5,
+                PageSize = 5
+            };
+            clientService.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()))
+                .ReturnsAsync(new List<Client>())
+                .Verifiable();
+
+            var controller = new HomeController(clientService.Object, config.Object, pagingOptions, env.Object);
+
+            // Act
+            var result = await controller.Index();
+
+            //Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<ClientsViewModel>(viewResult.ViewData.Model);
+            Assert.Equal(0, model.ItemCount);
         }
 
         private List<Client> GetTestClients()

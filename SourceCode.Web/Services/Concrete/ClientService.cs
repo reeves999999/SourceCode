@@ -22,7 +22,7 @@ namespace SourceCode.Web.Services
             var query = _dbContext.Clients
                 .AsNoTracking();
 
-            if (!string.IsNullOrWhiteSpace(search.Trim()))
+            if (search != null && !string.IsNullOrWhiteSpace(search.Trim()))
             {
                 query = query
                 .Where(x => x.Name.Contains(search));
