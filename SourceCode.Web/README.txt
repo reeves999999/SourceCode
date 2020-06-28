@@ -22,15 +22,14 @@ Application features:
 Missed out, but would have added, given time:
 
 -Something other than jQuery! - As Bootstrap uses this and I wanted Bootstrap I just stuck with it and its jQuery-based scripting
--Fluent API
+-Fluent API for ClientProject
 -CQRS
 -Swagger
--Separate API,MVC and Service projects
+-Separate API,MVC, Domain and Service projects
 -Separate Identity and Application DB contexts
--Hand crafted my own HTML - used Inspinia Bootstrap wrapper for headstart
 -React for front end interaction
 -Move connection string into Key Vault or similar
--Auth and roles
+-Authentication and roles
 -JWT for APIs
 -Centralised, sharable JS modules
 -Polly (API retries)
@@ -44,7 +43,7 @@ Missed out, but would have added, given time:
 -Allow JS to update paging status (currently commented out) 
 -Make modals reusable
 -Possibly add AutoMapper (not a fan of its overuse and silent failures)
--CRUD for the Projects
+-CRUD for the Client Projects
 
 ISSUES:
 

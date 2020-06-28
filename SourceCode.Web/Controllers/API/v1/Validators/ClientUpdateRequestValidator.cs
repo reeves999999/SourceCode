@@ -17,7 +17,7 @@ namespace SourceCode.Web.Controllers.API.v1.Validators
 
                 RuleFor(x => x.WebSite)
                     .NotEmpty()
-                    .Matches(@"^http(s)?://([\w-]+.)+[\w-]+(/[\w- ./?%&=])?$");
+                    .Matches(@"^([\w-]+.)+[\w-]+(/[\w- ./?%&=])?$");
 
                 RuleFor(x => x.EmailAddress)
                     .NotEmpty()

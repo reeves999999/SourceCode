@@ -65,10 +65,8 @@ async function getClients() {
         response = await fetch(`${uri}Search/${searchParam}`);
     }
     else {
-response = await fetch(uri);
+        response = await fetch(uri);
     }
-    
-    
 
     if (response.ok) {
         await response.json()
@@ -104,7 +102,7 @@ async function addClient() {
     });
 
     if (response.ok) {
-        let json = await response.json()
+        await response.json()
             .then(() => {
                 addClientNameTextbox.value = '';
                 addWebSiteTextbox.value = '';
@@ -298,5 +296,3 @@ function clearModalErrors() {
 }
 
 getClients();
-
-//setEvents();
