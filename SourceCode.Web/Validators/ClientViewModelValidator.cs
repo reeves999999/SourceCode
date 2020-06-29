@@ -20,7 +20,7 @@ namespace SourceCode.Web.Validators
 
             RuleFor(x => x.WebSite)
                 .NotEmpty()
-                .Matches(@"^http(s)?://([\w-]+.)+[\w-]+(/[\w- ./?%&=])?$");
+                .Matches(@"^(http(s)?://)?([\w-]+.)+[\w-]+(/[\w- ./?%&=])?$");
 
             RuleFor(x => x.EmailAddress)
                 .NotEmpty()

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using SourceCode.Web.Data;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SourceCode.Web.Domain.Entities
 {
-    public class ClientProject
+    public class ClientProject : IAuditableEntity
     {
         [Key]
         public Guid Id { get; set; }
@@ -15,6 +16,11 @@ namespace SourceCode.Web.Domain.Entities
         public Guid ClientId { get; set; }
 
         public virtual Client Client { get; set; }
+
+
+        public string UpdatedBy { get; set; }
+
+        public DateTime? DateUpdated { get; set; }
 
     }
 }

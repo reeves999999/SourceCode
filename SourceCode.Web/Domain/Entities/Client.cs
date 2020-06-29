@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using SourceCode.Web.Data;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SourceCode.Web.Domain.Entities
 {
-    public class Client
+    public class Client : IAuditableEntity
     {
         public Client()
         {
